@@ -2,11 +2,10 @@
 
 #. /lib/rbd-lib.sh
 
-
-ceph_to_var() {
-    local cephuser; local cephpass
+rbd_to_var() {
+    local cephuser; local cephpass; local path
     # Check required arguments
-    server=${1##ceph://}
+    server=${1##rbd://}
     cephuser=${server%@*}
     cephpass=${cephuser#*:}
     if [ "$cephpass" != "$cephuser" ]; then
@@ -23,12 +22,14 @@ ceph_to_var() {
     path=${server#*/}
     server=${server%:/*}
 
-    if [ ! "$cephuser" -o ! "$cephpass" ]; then
-	die "For CEPH support you need to specify a cephuser and cephpass either in the cephuser and cephpass commandline parameters or in the root= CEPH URL."
-    fi
-    options="name=$cephuser,secret=$cephpass,noatime,nodiratime"
-}
+    pool=${path%/*}
+    name=${path#*/}
 
+    if [ ! "$cephuser" -o ! "$cephpass" ]; then
+	die "For RBD support you need to specify a cephuser and cephpass either in the cephuser and cephpass commandline parameters or in the root= CEPH URL."
+    fi
+    options="name=$cephuser,secret=$cephpass"
+}
 
 [ "$#" = 3 ] || exit 1
 
