@@ -51,7 +51,7 @@ fi
 [ "${netroot%%:*}" = "rbd" ] || return
 
 # Check required arguments
-rbd_to_var $rbd
+#rbd_to_var $rbd
 
 # If we don't have a server, we need dhcp
 if [ -z "$server" ] ; then
